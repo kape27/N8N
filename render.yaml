@@ -78,8 +78,7 @@ services:
 
       # --- Force IPv4 (évite les erreurs de connexion IPv6) ---
       - key: NODE_OPTIONS
-        value: --dns-result-order=ipv4first --max-old-space-size=460
+        value: --dns-result-order=ipv4first --max-old-space-size=400
       
       # --- Désactiver les runners Python (économise de la RAM) ---
-      - key: N8N_RUNNERS_DISABLED
-        value: true
+      # Note: Les runners n'existent pas en v1.x
