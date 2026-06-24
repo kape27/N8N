@@ -2,12 +2,13 @@ services:
   - type: web
     name: n8n
     env: docker
-    region: frankfurt # optional (defaults to oregon)
-    plan: free # optional (defaults to starter)
-    branch: main # optional (defaults to master)
+    region: frankfurt
+    plan: free
+    branch: main
     numInstances: 1
     healthCheckPath: /healthz
     envVars:
+      # --- Database (configure dans le dashboard Render après déploiement) ---
       - key: DB_TYPE
         value: postgresdb
       - key: DB_POSTGRESDB_HOST
@@ -19,13 +20,19 @@ services:
       - key: DB_POSTGRESDB_USER
         value: postgres.vtnqdcxaugstcxkmkpke
       - key: DB_POSTGRESDB_PASSWORD
-        value: Cypla2705.mbg
+        sync: false  # À configurer manuellement ! Voir README
       - key: DB_POSTGRESDB_SSL
         value: true
+      - key: DB_POSTGRESDB_POOL_SIZE
+        value: 3
+
+      # --- n8n Configuration ---
       - key: PORT
         value: 5678
+      - key: N8N_PROTOCOL
+        value: https
       - key: N8N_LOG_LEVEL
-        value: info
+        value: warn
       - key: GENERIC_TIMEZONE
         value: Europe/Paris
       - key: TZ
@@ -34,27 +41,39 @@ services:
         value: fr
       - key: N8N_ENCRYPTION_KEY
         generateValue: true
+
+      # --- Webhook URL (à configurer après déploiement) ---
       - key: WEBHOOK_URL
-        value: https://n8n.onrender.com
+        sync: false  # Mets ton URL Render ex: https://n8n-xxxx.onrender.com
       - key: N8N_HOST
-        value: n8n.onrender.com
-      - key: N8N_PROTOCOL
-        value: https
+        sync: false  # Mets ton host Render ex: n8n-xxxx.onrender.com
+
+      # --- Authentication ---
       - key: N8N_BASIC_AUTH_ACTIVE
         value: true
       - key: N8N_BASIC_AUTH_USER
         value: admin
       - key: N8N_BASIC_AUTH_PASSWORD
         generateValue: true
-      - key: EXECUTIONS_DATA_PRUNE
-        value: true
-      - key: EXECUTIONS_DATA_MAX_AGE
-        value: 24
+
+      # --- Performance ---
+      - key: N8N_CONCURRENCY_PRODUCTION_LIMIT
+        value: 3
+      - key: EXECUTIONS_TIMEOUT
+        value: 300
       - key: N8N_DIAGNOSTICS_ENABLED
         value: false
       - key: N8N_PERSONALIZATION_ENABLED
         value: false
       - key: N8N_METRICS
         value: false
-      - key: DB_POSTGRESDB_POOL_SIZE
-        value: 10
+
+      # --- Execution Data Pruning ---
+      - key: EXECUTIONS_DATA_PRUNE
+        value: true
+      - key: EXECUTIONS_DATA_MAX_AGE
+        value: 24
+
+      # --- Force IPv4 (évite les erreurs de connexion IPv6) ---
+      - key: NODE_OPTIONS
+        value: "--dns-result-order=ipv4first"
