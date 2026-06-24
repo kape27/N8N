@@ -1,6 +1,6 @@
 FROM python:3-alpine AS python-build
 
-FROM n8nio/n8n:1.68.0
+FROM n8nio/n8n:2.26.7
 
 USER root
 
