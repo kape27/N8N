@@ -20,7 +20,7 @@ services:
       - key: DB_POSTGRESDB_USER
         value: postgres.vtnqdcxaugstcxkmkpke
       - key: DB_POSTGRESDB_PASSWORD
-        sync: false  # À configurer manuellement ! Voir README
+        value: Cypla2705.mbg  # ⚠️ CHANGE-MOI après déploiement !
       - key: DB_POSTGRESDB_SSL
         value: true
       - key: DB_POSTGRESDB_POOL_SIZE
@@ -76,4 +76,4 @@ services:
 
       # --- Force IPv4 (évite les erreurs de connexion IPv6) ---
       - key: NODE_OPTIONS
-        value: "--dns-result-order=ipv4first"
+        value: --dns-result-order=ipv4first
