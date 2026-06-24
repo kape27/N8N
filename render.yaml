@@ -11,15 +11,15 @@ services:
       - key: DB_TYPE
         value: postgresdb
       - key: DB_POSTGRESDB_HOST
-        sync: false
+        value: aws-0-eu-west-1.pooler.supabase.com
       - key: DB_POSTGRESDB_DATABASE
         value: postgres
       - key: DB_POSTGRESDB_PORT
-        value: 5432
+        value: 6543
       - key: DB_POSTGRESDB_USER
-        sync: false
+        value: postgres.vtnqdcxaugstcxkmkpke
       - key: DB_POSTGRESDB_PASSWORD
-        sync: false
+        value: Cypla2705.mbg
       - key: DB_POSTGRESDB_SSL
         value: true
       - key: PORT
@@ -35,9 +35,9 @@ services:
       - key: N8N_ENCRYPTION_KEY
         generateValue: true
       - key: WEBHOOK_URL
-        sync: false
+        value: https://n8n.onrender.com
       - key: N8N_HOST
-        sync: false
+        value: n8n.onrender.com
       - key: N8N_PROTOCOL
         value: https
       - key: N8N_BASIC_AUTH_ACTIVE
@@ -49,4 +49,12 @@ services:
       - key: EXECUTIONS_DATA_PRUNE
         value: true
       - key: EXECUTIONS_DATA_MAX_AGE
-        value: 168
+        value: 24
+      - key: N8N_DIAGNOSTICS_ENABLED
+        value: false
+      - key: N8N_PERSONALIZATION_ENABLED
+        value: false
+      - key: N8N_METRICS
+        value: false
+      - key: DB_POSTGRESDB_POOL_SIZE
+        value: 10
