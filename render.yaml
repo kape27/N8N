@@ -44,9 +44,9 @@ services:
 
       # --- Webhook URL (à configurer après déploiement) ---
       - key: WEBHOOK_URL
-        sync: false  # Mets ton URL Render ex: https://n8n-xxxx.onrender.com
+        value: https://n8n-ic76.onrender.com
       - key: N8N_HOST
-        sync: false  # Mets ton host Render ex: n8n-xxxx.onrender.com
+        value: n8n-ic76.onrender.com
 
       # --- Authentication ---
       - key: N8N_BASIC_AUTH_ACTIVE
