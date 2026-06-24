@@ -1,0 +1,92 @@
+version: '3.8'
+
+services:
+  n8n:
+    build: .
+    container_name: n8n
+    restart: unless-stopped
+    ports:
+      - "5678:5678"
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
+      - 1.1.1.1
+    extra_hosts:
+      - "aws-0-eu-west-1.pooler.supabase.com:34.241.16.247"
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+          cpus: "2"
+        reservations:
+          memory: 1G
+    environment:
+      # Database Configuration (Supabase) - Connection Pooler (IPv4)
+      - DB_TYPE=postgresdb
+      - DB_POSTGRESDB_HOST=aws-0-eu-west-1.pooler.supabase.com
+      - DB_POSTGRESDB_DATABASE=postgres
+      - DB_POSTGRESDB_PORT=6543
+      - DB_POSTGRESDB_USER=postgres.vtnqdcxaugstcxkmkpke
+      - DB_POSTGRESDB_PASSWORD=${DB_PASSWORD}
+      - DB_POSTGRESDB_SSL=true
+      
+      # Connection Pool Settings (optimisations)
+      - DB_POSTGRESDB_POOL_SIZE=3
+      
+      # Disable PostHog telemetry (améliore les performances)
+      - N8N_DIAGNOSTICS_ENABLED=false
+      - N8N_PERSONALIZATION_ENABLED=false
+      
+      # Performance optimizations
+      - N8N_METRICS=false
+      - N8N_CONCURRENCY_PRODUCTION_LIMIT=3
+      - EXECUTIONS_TIMEOUT=300
+      
+      # n8n Configuration
+      - N8N_HOST=${N8N_HOST:-localhost}
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=http
+      - WEBHOOK_URL=${WEBHOOK_URL:-http://localhost:5678}
+      
+      # Authentication
+      - N8N_BASIC_AUTH_ACTIVE=true
+      - N8N_BASIC_AUTH_USER=${N8N_USER:-admin}
+      - N8N_BASIC_AUTH_PASSWORD=${N8N_PASSWORD:-changeme}
+      
+      # Security
+      - N8N_ENCRYPTION_KEY=${N8N_ENCRYPTION_KEY}
+      
+      # Localization
+      - GENERIC_TIMEZONE=Europe/Paris
+      - TZ=Europe/Paris
+      - N8N_DEFAULT_LOCALE=fr
+      
+      # Logging
+      - N8N_LOG_LEVEL=warn
+      
+      # Execution Data Pruning
+      - EXECUTIONS_DATA_PRUNE=true
+      - EXECUTIONS_DATA_MAX_AGE=24
+      
+      # Queue mode for better performance
+      - QUEUE_HEALTH_CHECK_ACTIVE=false
+    
+    volumes:
+      - n8n_data:/home/node/.n8n
+    
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:5678/healthz"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+volumes:
+  n8n_data:
+    driver: local
