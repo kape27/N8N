@@ -20,11 +20,11 @@ services:
       - key: DB_POSTGRESDB_USER
         value: postgres.vtnqdcxaugstcxkmkpke
       - key: DB_POSTGRESDB_PASSWORD
-        value: Cypla2705.mbg  # ⚠️ CHANGE-MOI après déploiement !
+        value: Cypla2705.mbg
       - key: DB_POSTGRESDB_SSL
-        value: true
+        value: false
       - key: DB_POSTGRESDB_POOL_SIZE
-        value: 3
+        value: 2
 
       # --- n8n Configuration ---
       - key: PORT
@@ -56,9 +56,9 @@ services:
       - key: N8N_BASIC_AUTH_PASSWORD
         generateValue: true
 
-      # --- Performance ---
+      # --- Performance (optimisé pour plan free 512MB) ---
       - key: N8N_CONCURRENCY_PRODUCTION_LIMIT
-        value: 3
+        value: 1
       - key: EXECUTIONS_TIMEOUT
         value: 300
       - key: N8N_DIAGNOSTICS_ENABLED
@@ -66,6 +66,8 @@ services:
       - key: N8N_PERSONALIZATION_ENABLED
         value: false
       - key: N8N_METRICS
+        value: false
+      - key: QUEUE_HEALTH_CHECK_ACTIVE
         value: false
 
       # --- Execution Data Pruning ---
@@ -76,4 +78,8 @@ services:
 
       # --- Force IPv4 (évite les erreurs de connexion IPv6) ---
       - key: NODE_OPTIONS
-        value: --dns-result-order=ipv4first
+        value: --dns-result-order=ipv4first --max-old-space-size=460
+      
+      # --- Désactiver les runners Python (économise de la RAM) ---
+      - key: N8N_RUNNERS_DISABLED
+        value: true
